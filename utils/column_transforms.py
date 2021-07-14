@@ -1,16 +1,17 @@
 import re
-import pandas as pd
 import math
+
 
 # Function to convert product_size to OZ
 def product_size_oz(val):
+
     nums = re.compile("([0-9]+([.][0-9]+)?)")
     num_frac = re.compile("[0-9]+ [0-9]+[/][0-9]+")
     if type(val) is float and math.isnan(val):
         value = 0
     elif "LB" in val:
         if "OZ" in val:
-            [(lb,_), (oz,_)] = nums.findall(val)
+            [(lb, _), (oz, _)] = nums.findall(val)
             value = 16*float(lb) + float(oz)
         else:
             value = 16*float(nums.search(val).group(0))
@@ -19,7 +20,7 @@ def product_size_oz(val):
             match_val = num_frac.search(val).group(0)
             (whole, frac) = match_val.split(" ")
             (num, dem) = frac.split("/")
-            value = int(whole)+ (int(num)/int(dem))
+            value = int(whole) + (int(num) / int(dem))
         elif nums.search(val):
             value = float(nums.search(val).group(0))
         else:
@@ -29,13 +30,15 @@ def product_size_oz(val):
     else:
         value = 0
     return value
-	
+
+
 def fill_product_size(row):
+
     if (type(row["product_size"]) is float and math.isnan(row["product_size"])) or\
-        (("OZ" not in row["product_size"]) and\
-        ("LB" not in row["product_size"]) and\
-        ("OUNCE" not in row["product_size"]) and\
-        ("GAL" not in row["product_size"])):
+            (("OZ" not in row["product_size"]) and
+                ("LB" not in row["product_size"]) and
+                ("OUNCE" not in row["product_size"]) and
+                ("GAL" not in row["product_size"])):
         res = re.search("[0-9]+([.][0-9]+)? OZ", row["product_description"])
         if res:
             return res.group(0)
@@ -43,13 +46,15 @@ def fill_product_size(row):
             return row["product_size"]
     else:
         return row["product_size"]
-		
+
+
 def sweet_or_savoury(val):
     if "pasta" in val:
         return "Savoury"
     else:
         return "Sweet"
-		
+
+
 def purchase_customer_segment(row):
     if row["max_week"] < 52:
         return "Lost Customer"
@@ -67,7 +72,8 @@ def purchase_customer_segment(row):
         return "Store Loyal"
     else:
         return "Average Joe"
-		
+
+
 def product_customer_segment(row):
     if row["num_products"] == 1 and row["num_visits"] > 1:
         return "Product Loyal"

@@ -1,6 +1,4 @@
-import pandas as pd
 from utils import load_data, transform_product, transform_trnx, denormalise_data, create_customer_profile
-from utils import purchase_customer_segment, product_customer_segment
 
 # Load Data
 print("Loading raw data...")
@@ -31,4 +29,3 @@ print("\tDone")
 print("Saving Customer Profile to Disk...")
 customer_profile.to_csv("data/customer_profile.csv")
 print("\tDone!")
-
